@@ -7,6 +7,9 @@ require "rails/all"
 Bundler.require(*Rails.groups)
 require "stripe_billing"
 
+Dotenv::Railtie.load
+Dotenv.load("../../.env")
+
 module Dummy
   class Application < Rails::Application
     config.load_defaults Rails::VERSION::STRING.to_f
