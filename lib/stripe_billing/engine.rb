@@ -3,9 +3,9 @@ module StripeBilling
     isolate_namespace StripeBilling
 
     config.to_prepare do
+      ActiveRecord::Base.include(FeatureSetConcern)
+      # raise FeatureSetConcern.inspect
     end
-
-    config.factory_bot.definition_file_paths << root.join('spec', 'factories').to_s if defined?(FactoryBotRails)
 
     config.generators do |g|
       g.test_framework :rspec
