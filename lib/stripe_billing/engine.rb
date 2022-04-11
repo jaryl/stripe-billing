@@ -4,7 +4,6 @@ module StripeBilling
 
     config.to_prepare do
       ActiveRecord::Base.include(FeatureSetConcern)
-      # raise FeatureSetConcern.inspect
     end
 
     config.generators do |g|
