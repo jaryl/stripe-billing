@@ -16,7 +16,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_10_033156) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "provisioning_record_status", ["pending", "active", "expired"]
+  create_enum "event_status", ["pending", "completed", "noop"]
+  create_enum "provisioning_key_status", ["pending", "active", "expired"]
 
   create_table "accounts", force: :cascade do |t|
     t.string "email", null: false
@@ -35,17 +36,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_10_033156) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "stripe_billing_provisioning_records", force: :cascade do |t|
+  create_table "stripe_billing_provisioning_keys", force: :cascade do |t|
     t.string "billable_type"
     t.bigint "billable_id"
-    t.enum "status", default: "pending", null: false, enum_type: "provisioning_record_status"
-    t.boolean "renewable", default: true, null: false
+    t.enum "status", default: "pending", null: false, enum_type: "provisioning_key_status"
+    t.boolean "flagged_for_cancellation", default: false, null: false
     t.string "stripe_customer_id"
     t.string "stripe_subscription_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["billable_type", "billable_id"], name: "index_stripe_billing_provisioning_records_on_billable"
-    t.index ["billable_type", "billable_id"], name: "index_stripe_billing_provisioning_records_on_billable_unique", unique: true, where: "(status = ANY (ARRAY['pending'::provisioning_record_status, 'active'::provisioning_record_status]))"
+    t.index ["billable_type", "billable_id"], name: "index_stripe_billing_provisioning_keys_on_billable"
+    t.index ["billable_type", "billable_id"], name: "index_stripe_billing_provisioning_keys_on_billable_unique", unique: true, where: "(status = ANY (ARRAY['pending'::provisioning_key_status, 'active'::provisioning_key_status]))"
   end
 
 end

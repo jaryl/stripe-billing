@@ -1,3 +1,3 @@
 class Account < ApplicationRecord
-  has_many :provisioning_records, as: :billable, class_name: "StripeBilling::ProvisioningRecord"
+  has_many :provisioning_keys, as: :billable, class_name: "StripeBilling::ProvisioningKey"
 end

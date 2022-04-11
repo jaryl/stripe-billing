@@ -1,5 +1,5 @@
 module StripeBilling
-  class ProvisioningRecord < ApplicationRecord
+  class ProvisioningKey < ApplicationRecord
     enum status: {
       pending: "pending",
       active: "active",
