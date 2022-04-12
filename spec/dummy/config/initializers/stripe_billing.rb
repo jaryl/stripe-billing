@@ -1,9 +1,9 @@
 StripeBilling.setup do |config|
-  config.error_reporter = ->(error, **kwargs) {
-    Rails.logger.error error.message, error: error if Rails.env.development?
-  }
+  config.logger = Rails.logger.tagged("stripe-billing")
 
-  config.logger = ActiveSupport::TaggedLogging.new(Rails.logger).tagged("stripe-billing")
+  config.error_reporter = ->(error, **kwargs) {
+    StripeBilling.logger.error error.message, error: error
+  }
 end
 
 Rails.configuration.after_initialize do

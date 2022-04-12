@@ -11,6 +11,8 @@ group :development, :test do
   gem "pg", "~> 1.3.1"
   # Sprockets Rails integration
   gem "sprockets-rails"
+  # Ruby on Rails Logtail integration
+  gem "logtail-rails", "~> 0.1.6"
 end
 
 group :test do

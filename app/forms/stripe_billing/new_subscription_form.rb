@@ -26,6 +26,10 @@ module StripeBilling
       false
     end
 
+    def available_plans
+      StripeBilling.billing_plans
+    end
+
     private
 
     attr_reader :billing_party

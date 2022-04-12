@@ -23,5 +23,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rails", ">= 7.0.2"
   spec.add_dependency "stripe"
-  spec.add_dependency "logtail-rails", "~> 0.1.6"
 end

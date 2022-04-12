@@ -11,7 +11,6 @@ require "stripe_billing/billing_plan"
 require "stripe_billing/billing_plan_builder"
 
 require "stripe"
-require "logtail-rails"
 
 module StripeBilling
   mattr_accessor :error_reporter
