@@ -6,7 +6,7 @@ module StripeBilling
 
     attr_accessor :id, :product_id
 
-    delegate :nickname, :type, :active, :livemode, :currency, :unit_amount, :unit_amount_decimal, to: :stripe_price
+    delegate :nickname, :type, :active, :livemode, :currency, :unit_amount, :unit_amount_decimal, :recurring, to: :stripe_price
 
     def created_at
       Time.at(stripe_price.created).utc

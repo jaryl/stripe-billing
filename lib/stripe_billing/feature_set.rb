@@ -2,6 +2,8 @@ module StripeBilling
   class FeatureSet
     attr_reader :features
 
+    delegate :each, to: :features
+
     def self.with(key:, overrides: {})
       original_feature_set = StripeBilling.feature_sets[key || :default]
       return original_feature_set if overrides.empty?

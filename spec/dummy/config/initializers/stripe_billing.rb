@@ -25,13 +25,13 @@ Rails.configuration.after_initialize do
     billing_plan :basic_plan, id: "prod_LTU1h9mzsL0cwX" do
       provisions :basic_features
       price :monthly, id: "price_1KmX3qHRcyv3PAxT0DFNSEsL"
-      # price :annual
+      price :annual, id: "price_1Kp7OgHRcyv3PAxTl9RTuoKK"
     end
 
     billing_plan :premium_plan, id: "prod_LTU2D5Sv8YHkeQ" do
       provisions :premium_features
       price :monthly, id: "price_1KmX4KHRcyv3PAxTZBpxIcSn"
-      # price :annual
+      price :annual, id: "price_1Kp7PIHRcyv3PAxTOjg3LIQw"
     end
   end
 end

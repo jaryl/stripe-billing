@@ -26,7 +26,7 @@ module StripeBilling
     attr_reader :feature_set_key
 
     def initialize
-      @billing_prices = {}
+      @billing_prices = HashWithIndifferentAccess.new
     end
 
     def stripe_product
