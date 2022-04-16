@@ -208,6 +208,8 @@ GEM
       railties (>= 6.0.0)
     stripe (5.49.0)
     strscan (3.0.1)
+    tailwindcss-rails (2.0.8-arm64-darwin)
+      railties (>= 6.0.0)
     thor (1.2.1)
     timeout (0.2.0)
     tzinfo (2.0.4)
@@ -238,6 +240,7 @@ DEPENDENCIES
   sprockets-rails
   stimulus-rails
   stripe_billing!
+  tailwindcss-rails (~> 2.0)
   webmock
 
 BUNDLED WITH

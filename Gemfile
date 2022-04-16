@@ -22,6 +22,8 @@ group :development do
   gem "importmap-rails", "~> 1.0"
   # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
   gem "stimulus-rails"
+  # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
+  gem "tailwindcss-rails", "~> 2.0"
 end
 
 group :test do
