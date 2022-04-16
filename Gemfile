@@ -15,6 +15,15 @@ group :development, :test do
   gem "logtail-rails", "~> 0.1.6"
 end
 
+group :development do
+  # Use the Puma web server [https://github.com/puma/puma]
+  gem "puma", "~> 5.0"
+  # Use JavaScript with ESM import maps [https://github.com/rails/  -rails]
+  gem "importmap-rails", "~> 1.0"
+  # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+  gem "stimulus-rails"
+end
+
 group :test do
   # RSpec for Rails 5+
   gem "rspec-rails", "~> 5.0.0"
