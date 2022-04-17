@@ -45,6 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_042517) do
     t.boolean "flagged_for_cancellation", default: false, null: false
     t.string "stripe_customer_id"
     t.string "stripe_subscription_id"
+    t.string "stripe_product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["billable_type", "billable_id"], name: "index_stripe_billing_provisioning_keys_on_billable"
