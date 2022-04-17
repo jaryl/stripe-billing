@@ -5,8 +5,10 @@ module StripeBilling
     routes { Engine.routes }
 
     let(:account) { create(:account) }
+    let(:form) { double }
 
     before { account }
+    before { allow(NewSubscriptionForm).to receive(:new).and_return(form) }
 
     context "with no provisioning record" do
       describe "GET #show" do
@@ -24,17 +26,24 @@ module StripeBilling
       end
 
       describe "POST #create" do
+        before { allow(form).to receive(:submit).and_return(return_value) }
+        before { allow(form).to receive(:provisioning_key).and_return(build_stubbed(:provisioning_key)) }
+
         before { post :create, params: { new_subscription_form: params } }
 
         context "with valid params" do
           let(:params) { { plan: "basic_plan" } }
-          it { expect(assigns(:form)).to be_valid }
+          let(:return_value) { true }
+
+          it { expect(assigns(:provisioning_key)).to be_persisted }
           it { expect(response).to redirect_to(plan_path) }
         end
 
         context "with invalid params" do
           let(:params) { { plan: "" } }
-          it { expect(assigns(:form)).not_to be_valid }
+          let(:return_value) { false }
+
+          it { expect(assigns(:provisioning_key)).to be_blank }
           it { expect(response).to render_template(:new) }
         end
       end
@@ -52,30 +61,22 @@ module StripeBilling
 
       describe "GET #show" do
         before { get :show }
-
-        it { expect(assigns(:provisioning_key)).to be_present }
-        it { expect(response).to render_template(:show) }
+        it { expect(response).to redirect_to(plan_payment_path) }
       end
 
       describe "GET #new" do
         before { get :new }
-
-        it { expect(assigns(:provisioning_key)).to be_persisted }
-        it { expect(response).to redirect_to(plan_path) }
+        it { expect(response).to redirect_to(plan_payment_path) }
       end
 
       describe "POST #create" do
         before { post :create }
-
-        it { expect(assigns(:provisioning_key)).to be_persisted }
-        it { expect(response).to redirect_to(plan_path) }
+        it { expect(response).to redirect_to(plan_payment_path) }
       end
 
       describe "DELETE #destroy" do
         before { delete :destroy }
-
-        it { expect(assigns(:provisioning_key).flagged_for_cancellation?).to eq(true) }
-        it { expect(response).to redirect_to(new_plan_path) }
+        it { expect(response).to redirect_to(plan_payment_path) }
       end
     end
 
@@ -106,7 +107,7 @@ module StripeBilling
       describe "DELETE #destroy" do
         before { delete :destroy }
 
-        it { expect(assigns(:provisioning_key).flagged_for_cancellation?).to eq(true) }
+        it { expect(assigns(:provisioning_key)).to be_flagged_for_cancellation }
         it { expect(response).to redirect_to(new_plan_path) }
       end
     end
@@ -129,17 +130,24 @@ module StripeBilling
       end
 
       describe "POST #create" do
+        before { allow(form).to receive(:submit).and_return(return_value) }
+        before { allow(form).to receive(:provisioning_key).and_return(build_stubbed(:provisioning_key)) }
+
         before { post :create, params: { new_subscription_form: params } }
 
         context "with valid params" do
           let(:params) { { plan: "basic_plan" } }
-          it { expect(assigns(:form)).to be_valid }
+          let(:return_value) { true }
+
+          it { expect(assigns(:provisioning_key)).to be_persisted }
           it { expect(response).to redirect_to(plan_path) }
         end
 
         context "with invalid params" do
           let(:params) { { plan: "" } }
-          it { expect(assigns(:form)).not_to be_valid }
+          let(:return_value) { false }
+
+          it { expect(assigns(:provisioning_key)).to be_blank }
           it { expect(response).to render_template(:new) }
         end
       end

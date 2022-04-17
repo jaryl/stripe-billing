@@ -4,6 +4,7 @@ module StripeBilling
 
     def create
       @event = Event.create_with(event_params).find_or_create_by!(external_id: raw_stripe_event.id)
+      # TODO: process stripe event with background job
       head :ok
     rescue JSON::ParserError, Stripe::SignatureVerificationError, ActiveRecord::RecordInvalid => error
       StripeBilling.error_reporter.call(error, tags: ["stripe", "webhooks"])

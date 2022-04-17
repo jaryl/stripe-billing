@@ -1,7 +1,8 @@
 module StripeBilling
   class PlansController < ApplicationController
-    before_action :redirect_if_current_plan_exists, only: [:new, :create]
-    before_action :redirect_if_no_current_plan, only: [:show, :destroy]
+    before_action :redirect_if_provisioning_key_pending
+    before_action :redirect_if_current_provisioning_key_exists, only: [:new, :create]
+    before_action :redirect_if_no_current_provisioning_key, only: [:show, :destroy]
 
     def show
     end
@@ -14,9 +15,10 @@ module StripeBilling
     def create
       @form = NewSubscriptionForm.new(current_billing_party, new_subscription_form_params)
       if @form.submit
+        @provisioning_key = @form.provisioning_key
         redirect_to plan_path
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -31,16 +33,20 @@ module StripeBilling
       @provisioning_key ||= current_billing_party.provisioning_keys.not_expired&.first
     end
 
-    def redirect_if_current_plan_exists
+    def redirect_if_provisioning_key_pending
+      redirect_to plan_payment_path if provisioning_key&.pending?
+    end
+
+    def redirect_if_current_provisioning_key_exists
       redirect_to plan_path if provisioning_key.present?
     end
 
-    def redirect_if_no_current_plan
+    def redirect_if_no_current_provisioning_key
       redirect_to new_plan_path if provisioning_key.blank?
     end
 
     def new_subscription_form_params
-      params.require(:new_subscription_form).permit(:plan)
+      params.require(:new_subscription_form).permit(:plan_key, :price_key)
     end
   end
 end
