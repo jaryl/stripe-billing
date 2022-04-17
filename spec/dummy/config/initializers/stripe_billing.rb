@@ -1,4 +1,6 @@
 StripeBilling.setup do |config|
+  config.billing_party_class = "Account"
+
   config.logger = Rails.logger.tagged("stripe-billing")
 
   config.error_reporter = ->(error, **kwargs) {

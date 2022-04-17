@@ -16,10 +16,15 @@ require "after_commit_everywhere"
 module StripeBilling
   mattr_accessor :error_reporter
   mattr_accessor :logger
+  mattr_accessor :billing_party_class
 
   class << self
     def setup
       yield self
+    end
+
+    def billing_party
+      billing_party_class.safe_constantize
     end
 
     def billing_plans(&block)
