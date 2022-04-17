@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     stripe_billing (0.1.0)
+      after_commit_everywhere
       rails (>= 7.0.2)
       stripe
 
@@ -75,6 +76,9 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    after_commit_everywhere (1.2.0)
+      activerecord (>= 4.2)
+      activesupport
     builder (3.2.4)
     concurrent-ruby (1.1.10)
     crack (0.4.5)

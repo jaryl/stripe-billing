@@ -11,6 +11,7 @@ require "stripe_billing/billing_plan"
 require "stripe_billing/billing_plan_builder"
 
 require "stripe"
+require "after_commit_everywhere"
 
 module StripeBilling
   mattr_accessor :error_reporter
