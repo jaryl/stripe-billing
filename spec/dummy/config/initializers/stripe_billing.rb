@@ -22,16 +22,16 @@ Rails.configuration.after_initialize do
   end
 
   StripeBilling.billing_plans do
-    billing_plan :basic_plan, id: "prod_LTU1h9mzsL0cwX" do
+    billing_plan :basic_plan, id: ENV["SAMPLE_BASIC_PLAN_ID"] do
       provisions :basic_features
-      price :monthly, id: "price_1KmX3qHRcyv3PAxT0DFNSEsL"
-      price :annual, id: "price_1Kp7OgHRcyv3PAxTl9RTuoKK"
+      price :monthly, id: ENV["SAMPLE_BASIC_PLAN_MONTHLY_PRICE_ID"]
+      price :annual, id: ENV["SAMPLE_BASIC_PLAN_ANNUAL_PRICE_ID"]
     end
 
-    billing_plan :premium_plan, id: "prod_LTU2D5Sv8YHkeQ" do
+    billing_plan :premium_plan, id: ENV["SAMPLE_PREMIUM_PLAN_ID"] do
       provisions :premium_features
-      price :monthly, id: "price_1KmX4KHRcyv3PAxTZBpxIcSn"
-      price :annual, id: "price_1Kp7PIHRcyv3PAxTOjg3LIQw"
+      price :monthly, id: ENV["SAMPLE_PREMIUM_PLAN_MONTHLY_PRICE_ID"]
+      price :annual, id: ENV["SAMPLE_PREMIUM_PLAN_ANNUAL_PRICE_ID"]
     end
   end
 end
