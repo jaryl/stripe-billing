@@ -5,3 +5,4 @@ elsif Rails.env.test?
 end
 
 Rails.logger = ActiveSupport::TaggedLogging.new(logger)
+
