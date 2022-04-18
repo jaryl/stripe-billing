@@ -1,6 +1,7 @@
 module StripeBilling
   class PaymentsController < ApplicationController
-    before_action :redirect_if_no_pending_provisioning_key
+    before_action :redirect_if_no_pending_provisioning_key, only: [:show, :confirm]
+    before_action :redirect_if_already_active_provisioning_key, only: :show
     before_action :redirect_if_no_payment_intent_provided, only: :confirm
 
     def show
@@ -16,15 +17,19 @@ module StripeBilling
     end
 
     def redirect_if_no_pending_provisioning_key
-      if provisioning_key.blank?
-        redirect_to new_plan_path
-      elsif provisioning_key.active?
-        redirect_to plan_path
-      end
+      redirect_to new_plan_path if provisioning_key.blank?
+    end
+
+    def redirect_if_already_active_provisioning_key
+      redirect_to plan_path if provisioning_key.active?
     end
 
     def redirect_if_no_payment_intent_provided
-      redirect_to plan_path if params[:payment_intent].blank?
+      if params[:payment_intent].blank?
+        redirect_to plan_path
+      elsif provisioning_key.stripe_subscription.latest_invoice.payment_intent.id != params[:payment_intent]
+        redirect_to plan_path
+      end
     end
   end
 end

@@ -1,5 +1,7 @@
 module StripeBilling
   class ProcessStripeSubscriptionJob < ApplicationJob
+    include Turbo::Streams::StreamName
+
     queue_as :default
 
     def perform(provisioning_key, stripe_price_id)
@@ -7,7 +9,7 @@ module StripeBilling
 
       if provisioning_key.stripe_customer_id.blank?
         stripe_customer = generate_stripe_customer!(billing_party: provisioning_key.billable)
-        provisioning_key.update(stripe_customer_id: stripe_customer.id)
+        provisioning_key.update!(stripe_customer_id: stripe_customer.id)
       end
 
       if provisioning_key.stripe_subscription_id.blank?
@@ -15,8 +17,17 @@ module StripeBilling
           provisioning_key: provisioning_key,
           stripe_price_id: stripe_price_id,
         )
-        provisioning_key.update(stripe_subscription_id: stripe_subscription.id)
+        provisioning_key.update!(stripe_subscription_id: stripe_subscription.id)
       end
+
+      Turbo::StreamsChannel.broadcast_stream_to(
+        [provisioning_key.billable, provisioning_key],
+        content: ApplicationController.render(
+          :turbo_stream,
+          partial: "stripe_billing/payments/provisioning_key",
+          locals: { provisioning_key: provisioning_key },
+        )
+      )
     end
 
     private

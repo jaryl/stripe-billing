@@ -1,3 +1,7 @@
+require "turbo-rails"
+require "stripe"
+require "after_commit_everywhere"
+
 require "stripe_billing/version"
 require "stripe_billing/engine"
 require "stripe_billing/errors"
@@ -11,9 +15,6 @@ require "stripe_billing/billing_plan"
 require "stripe_billing/billing_plan_builder"
 
 require "stripe_billing/webhooks_builder"
-
-require "stripe"
-require "after_commit_everywhere"
 
 module StripeBilling
   mattr_accessor :error_reporter

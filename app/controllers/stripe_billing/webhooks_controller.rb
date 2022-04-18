@@ -3,7 +3,6 @@ module StripeBilling
     skip_before_action :verify_authenticity_token
 
     def create
-      # TODO: extract into webhook service
       @event = Event.create_with(event_params).find_or_create_by!(external_id: raw_stripe_event.id)
 
       handlers = StripeBilling.webhooks[@event.object_type] || []

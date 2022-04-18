@@ -46,7 +46,7 @@ module StripeBilling
     end
 
     def new_subscription_form_params
-      params.require(:new_subscription_form).permit(:plan_key, :price_key)
+      params.require(:new_subscription_form).permit(:id, :plan_key, :price_key)
     end
   end
 end

@@ -4,7 +4,7 @@ module StripeBilling
     include ActiveModel::Validations
     include AfterCommitEverywhere
 
-    attr_accessor :plan_key, :price_key
+    attr_accessor :id, :plan_key, :price_key
     attr_reader :provisioning_key
 
     validates :plan_key, :price_key, presence: true
@@ -14,6 +14,7 @@ module StripeBilling
     def initialize(billing_party, params = {})
       @billing_party = billing_party
       super(params)
+      @id ||= SecureRandom.uuid
       @provisioning_key = billing_party.provisioning_keys.build(provisioning_key_params)
     end
 
@@ -51,7 +52,11 @@ module StripeBilling
     end
 
     def provisioning_key_params
-      { plan_key: plan_key, price_key: price_key }
+      {
+        id: id,
+        plan_key: plan_key,
+        price_key: price_key,
+      }
     end
   end
 end

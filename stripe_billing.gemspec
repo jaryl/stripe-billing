@@ -22,6 +22,8 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "rails", ">= 7.0.2"
+  spec.add_dependency "turbo-rails"
+  spec.add_dependency "redis"
   spec.add_dependency "stripe"
   spec.add_dependency "after_commit_everywhere"
 end

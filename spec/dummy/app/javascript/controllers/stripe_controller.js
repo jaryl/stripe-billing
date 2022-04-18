@@ -7,24 +7,37 @@ export default class extends Controller {
 
   initialize() {
     this.returnUrl = this.element.dataset.stripeReturnUrl;
+    this.ready = false;
+    this.operations = [];
 
-    (async () => {
+    (async() => {
       this.stripe = await Stripe.loadStripe(this.element.dataset.stripePublishableKey);
-      this.#setup();
+      this.#ready();
     })();
   }
 
-  #setup() {
-    if (!this.hasPaymentTarget) return;
+  paymentTargetConnected() {
+    const mountPaymentElement = () => {
+      const appearance = { theme: 'stripe' };
+      const clientSecret = this.paymentTarget.dataset.stripeClientSecret;
 
-    const appearance = { theme: 'stripe' };
-    const clientSecret = this.element.dataset.stripeClientSecret;
+      this.elements = this.stripe.elements({ appearance, clientSecret });
+      const paymentElement = this.elements.create("payment");
 
-    this.elements = this.stripe.elements({ appearance, clientSecret });
-    const paymentElement = this.elements.create("payment");
+      paymentElement.mount(this.paymentTarget);
+      this.submitTarget.disabled = false;
+    };
 
-    paymentElement.mount(this.paymentTarget);
-    this.submitTarget.disabled = false;
+    if (this.ready) {
+      mountPaymentElement();
+    } else {
+      this.operations.push(mountPaymentElement);
+    }
+  }
+
+  #ready() {
+    this.ready = true;
+    this.operations.forEach(operation => operation());
   }
 
   async makePayment(e) {
@@ -35,7 +48,6 @@ export default class extends Controller {
 
     this.errorsTarget.classList.remove("invisible");
     const selector = this.errorsTarget.dataset.selector;
-    alert(selector)
 
     if (error.type === "card_error" || error.type === "validation_error") {
       this.errorsTarget.querySelector(selector).textContent = error.message;

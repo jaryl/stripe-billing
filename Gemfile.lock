@@ -4,7 +4,9 @@ PATH
     stripe_billing (0.1.0)
       after_commit_everywhere
       rails (>= 7.0.2)
+      redis
       stripe
+      turbo-rails
 
 GEM
   remote: https://rubygems.org/
@@ -181,6 +183,7 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
+    redis (4.6.0)
     rexml (3.2.5)
     rspec-core (3.11.0)
       rspec-support (~> 3.11.0)
@@ -216,6 +219,9 @@ GEM
       railties (>= 6.0.0)
     thor (1.2.1)
     timeout (0.2.0)
+    turbo-rails (1.0.1)
+      actionpack (>= 6.0.0)
+      railties (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     webmock (3.14.0)

@@ -1,0 +1,3 @@
+<%= turbo_stream.replace("payment-element") do %>
+  <%= render partial: "stripe_billing/payments/payment_element", locals: { provisioning_key: provisioning_key } %>
+<%- end %>

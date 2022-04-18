@@ -9,7 +9,10 @@ module StripeBilling
     before { account }
 
     context "with pending provisioning key" do
+      let(:payment_intent) { SecureRandom.uuid }
+
       before { create(:provisioning_key, billable: account, status: :pending) }
+      before { allow_any_instance_of(StripeBilling::ProvisioningKey).to receive_message_chain(:stripe_subscription, :latest_invoice, :payment_intent, :id) { payment_intent } }
 
       describe "GET #show" do
         before { get :show }
@@ -19,24 +22,25 @@ module StripeBilling
       end
 
       describe "GET #confirm" do
-        context "with url params" do
-          before { get :confirm, params: { payment_intent: "something" } }
+        context "with valid url params" do
+          before { get :confirm, params: { payment_intent: payment_intent } }
 
           it { expect(assigns(:provisioning_key)).to be_pending }
           it { expect(response).to render_template(:confirm) }
         end
 
-        context "with no url params" do
-          before { get :confirm }
-
-          it { expect(assigns(:provisioning_key)).to be_pending }
+        context "with invalid url params" do
+          before { get :confirm, params: { payment_intent: "invalid-value" } }
           it { expect(response).to redirect_to(plan_path) }
         end
       end
     end
 
     context "with active provisioning key" do
+      let(:payment_intent) { SecureRandom.uuid }
+
       before { create(:provisioning_key, billable: account, status: :active) }
+      before { allow_any_instance_of(StripeBilling::ProvisioningKey).to receive_message_chain(:stripe_subscription, :latest_invoice, :payment_intent, :id) { payment_intent } }
 
       describe "GET #show" do
         before { get :show }
@@ -44,8 +48,17 @@ module StripeBilling
       end
 
       describe "GET #confirm" do
-        before { get :confirm }
-        it { expect(response).to redirect_to(plan_path) }
+        context "with valid url params" do
+          before { get :confirm, params: { payment_intent: payment_intent } }
+
+          it { expect(assigns(:provisioning_key)).to be_active }
+          it { expect(response).to render_template(:confirm) }
+        end
+
+        context "with invalid url params" do
+          before { get :confirm, params: { payment_intent: "invalid-value" } }
+          it { expect(response).to redirect_to(plan_path) }
+        end
       end
     end
 
