@@ -11,8 +11,8 @@ module StripeBilling
       kwargs[:tags].concat(REPORTING_TAGS).uniq!
 
       kwargs[:parameters] = arguments.inject({}) do |acc, arg|
-        if arg.respond_to?(:to_global_id)
-          acc[acc.length] = arg.to_global_id.to_s
+        if arg.respond_to?(:to_sgid)
+          acc[acc.length] = arg.to_sgid(expires_in: nil).to_s
         else
           acc[acc.length] = arg
         end

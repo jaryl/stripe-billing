@@ -1,6 +1,6 @@
 module StripeBilling
   class FeatureSet
-    attr_reader :features
+    attr_reader :key, :features
 
     delegate :each, to: :features
 
@@ -27,7 +27,8 @@ module StripeBilling
 
     private
 
-    def initialize
+    def initialize(key)
+      @key = key.to_sym
       @features = {}
     end
 

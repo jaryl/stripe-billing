@@ -9,6 +9,10 @@ module StripeBilling
 
     belongs_to :billable, polymorphic: true
 
+    def billing_plan
+      @billing_plan ||= StripeBilling.billing_plans[plan_key]
+    end
+
     def client_secret
       @client_secret ||= stripe_subscription.latest_invoice.payment_intent.client_secret
     end

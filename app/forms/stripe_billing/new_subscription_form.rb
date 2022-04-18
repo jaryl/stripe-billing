@@ -13,8 +13,8 @@ module StripeBilling
 
     def initialize(billing_party, params = {})
       @billing_party = billing_party
-      @provisioning_key = billing_party.provisioning_keys.build
       super(params)
+      @provisioning_key = billing_party.provisioning_keys.build(provisioning_key_params)
     end
 
     def submit
@@ -48,6 +48,10 @@ module StripeBilling
 
     def selected_price_must_be_valid
       errors.add(:selected_price, "Something went wrong") if selected_price.blank?
+    end
+
+    def provisioning_key_params
+      { plan_key: plan_key, price_key: price_key }
     end
   end
 end

@@ -24,7 +24,7 @@ module StripeBilling
     def generate_stripe_customer!(billing_party:)
       Stripe::Customer.create(
         email: billing_party.email,
-        metadata: { billing_party_gid: billing_party.to_global_id.to_s },
+        metadata: { billing_party_gid: billing_party.to_sgid(expires_in: nil).to_s },
       )
     end
 
@@ -34,7 +34,7 @@ module StripeBilling
         items: [{ price: stripe_price_id }],
         payment_behavior: "default_incomplete",
         expand: ["latest_invoice.payment_intent"],
-        metadata: { provisioning_key_gid: provisioning_key.to_global_id.to_s },
+        metadata: { provisioning_key_gid: provisioning_key.to_sgid(expires_in: nil).to_s },
       )
     end
   end

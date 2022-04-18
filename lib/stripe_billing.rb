@@ -10,6 +10,8 @@ require "stripe_billing/billing_price"
 require "stripe_billing/billing_plan"
 require "stripe_billing/billing_plan_builder"
 
+require "stripe_billing/webhooks_builder"
+
 require "stripe"
 require "after_commit_everywhere"
 
@@ -43,6 +45,15 @@ module StripeBilling
       builder.instance_eval(&block) if block.present?
 
       @@feature_sets = builder.build
+    end
+
+    def webhooks(&block)
+      return @@webhooks if defined?(@@webhooks)
+
+      builder = WebhooksBuilder.new
+      builder.instance_eval(&block) if block.present?
+
+      @@webhooks = builder.build
     end
   end
 

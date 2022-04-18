@@ -16,8 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_042517) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "event_status", ["pending", "completed", "noop"]
-  create_enum "provisioning_key_status", ["pending", "active", "expired"]
+  create_enum "provisioning_key_status", ["pending", "active", "expired", "failed"]
 
   create_table "accounts", force: :cascade do |t|
     t.string "email", null: false
@@ -43,6 +42,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_042517) do
     t.bigint "billable_id"
     t.enum "status", default: "pending", null: false, enum_type: "provisioning_key_status"
     t.boolean "flagged_for_cancellation", default: false, null: false
+    t.string "plan_key", null: false
+    t.string "price_key", null: false
     t.string "stripe_customer_id"
     t.string "stripe_subscription_id"
     t.string "stripe_product_id"

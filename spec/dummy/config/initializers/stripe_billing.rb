@@ -36,4 +36,9 @@ Rails.configuration.after_initialize do
       price :annual, id: ENV["SAMPLE_PREMIUM_PLAN_ANNUAL_PRICE_ID"]
     end
   end
+
+  StripeBilling.webhooks do
+    process "invoice.payment_succeeded", with: StripeBilling::DefaultPaymentMethodForStripeSubscriptionJob
+    process "customer.subscription.created", "customer.subscription.updated", "customer.subscription.deleted", with: StripeBilling::ActivateProvisioningKeyJob
+  end
 end

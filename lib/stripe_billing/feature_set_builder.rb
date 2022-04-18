@@ -1,7 +1,7 @@
 module StripeBilling
   class FeatureSetBuilder
     def initialize
-      @feature_sets = HashWithIndifferentAccess.new { |hash, key| hash[key] = FeatureSet.send(:new) }
+      @feature_sets = HashWithIndifferentAccess.new { |hash, key| hash[key] = FeatureSet.send(:new, key) }
     end
 
     def feature_set(key, &block)

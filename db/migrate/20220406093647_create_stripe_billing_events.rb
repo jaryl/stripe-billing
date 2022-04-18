@@ -1,7 +1,5 @@
 class CreateStripeBillingEvents < ActiveRecord::Migration[7.0]
   def change
-    create_enum "event_status", ["pending", "completed", "noop"]
-
     create_table :stripe_billing_events do |t|
       t.string :external_id, null: false, unique: true
 

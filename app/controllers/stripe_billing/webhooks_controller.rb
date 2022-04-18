@@ -3,8 +3,12 @@ module StripeBilling
     skip_before_action :verify_authenticity_token
 
     def create
+      # TODO: extract into webhook service
       @event = Event.create_with(event_params).find_or_create_by!(external_id: raw_stripe_event.id)
-      # TODO: process stripe event with background job
+
+      handlers = StripeBilling.webhooks[@event.object_type] || []
+      handlers.each { |handler| handler.perform_later(@event) }
+
       head :ok
     rescue JSON::ParserError, Stripe::SignatureVerificationError, ActiveRecord::RecordInvalid => error
       StripeBilling.error_reporter.call(error, tags: ["stripe", "webhooks"])
