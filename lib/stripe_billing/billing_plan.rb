@@ -2,13 +2,13 @@ module StripeBilling
   class BillingPlan
     include ActiveModel::AttributeAssignment
 
-    attr_accessor :id
+    attr_accessor :id, :billing_party_type
     attr_reader :feature_set, :billing_prices
 
     delegate :name, :description, :active, :livemode, to: :stripe_product
 
     def provisions(key)
-      @feature_set ||= StripeBilling.feature_sets[key]
+      @feature_set ||= StripeBilling.feature_sets(billing_party_type)[key]
     end
 
     def price(key, **kwargs)
@@ -25,7 +25,8 @@ module StripeBilling
 
     attr_reader :feature_set_key
 
-    def initialize
+    def initialize(billing_party_type)
+      @billing_party_type = billing_party_type
       @billing_prices = HashWithIndifferentAccess.new
     end
 

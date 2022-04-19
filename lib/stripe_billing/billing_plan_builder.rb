@@ -1,7 +1,8 @@
 module StripeBilling
   class BillingPlanBuilder
-    def initialize
-      @billing_plans = HashWithIndifferentAccess.new { |hash, key| hash[key] = BillingPlan.send(:new) }
+    def initialize(billing_party_type)
+      @billing_party_type = billing_party_type
+      @billing_plans = HashWithIndifferentAccess.new { |hash, key| hash[key] = BillingPlan.send(:new, billing_party_type) }
     end
 
     def billing_plan(key, **kwargs, &block)
@@ -19,6 +20,6 @@ module StripeBilling
 
     private
 
-    attr_reader :billing_plans
+    attr_reader :billing_plans, :billing_party_type
   end
 end

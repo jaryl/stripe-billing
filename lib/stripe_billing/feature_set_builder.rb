@@ -1,7 +1,8 @@
 module StripeBilling
   class FeatureSetBuilder
-    def initialize
-      @feature_sets = HashWithIndifferentAccess.new { |hash, key| hash[key] = FeatureSet.send(:new, key) }
+    def initialize(billing_party_type)
+      @billing_party_type = billing_party_type
+      @feature_sets = HashWithIndifferentAccess.new { |hash, key| hash[key] = FeatureSet.send(:new, billing_party_type, key) }
     end
 
     def feature_set(key, &block)
@@ -18,6 +19,6 @@ module StripeBilling
 
     private
 
-    attr_reader :feature_sets
+    attr_reader :feature_sets, :billing_party_type
   end
 end

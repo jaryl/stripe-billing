@@ -10,6 +10,7 @@ module StripeBilling
 
         define_method(options[:accessor]) do
           @feature_set ||= StripeBilling::FeatureSet.with(
+            billing_party_type: self.class.to_s.tableize,
             key: send(options[:key]),
             overrides: send(options[:overrides]),
           )

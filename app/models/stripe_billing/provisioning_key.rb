@@ -5,12 +5,13 @@ module StripeBilling
       active: "active",
       expired: "expired",
       failed: "failed",
+      cancelled: "cancelled",
     }
 
     belongs_to :billable, polymorphic: true
 
     def billing_plan
-      @billing_plan ||= StripeBilling.billing_plans[plan_key]
+      @billing_plan ||= StripeBilling.billing_plans[billable_type.tableize][plan_key]
     end
 
     def client_secret

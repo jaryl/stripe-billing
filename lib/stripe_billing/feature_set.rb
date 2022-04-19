@@ -4,8 +4,8 @@ module StripeBilling
 
     delegate :each, to: :features
 
-    def self.with(key:, overrides: {})
-      original_feature_set = StripeBilling.feature_sets[key || :default]
+    def self.with(billing_party_type:, key:, overrides: {})
+      original_feature_set = StripeBilling.feature_sets(billing_party_type)[key || :default]
       return original_feature_set if overrides.empty?
 
       overrides.inject(original_feature_set.deep_dup) do |feature_set, (key, values)|
@@ -27,8 +27,11 @@ module StripeBilling
 
     private
 
-    def initialize(key)
+    attr_reader :billing_party_type
+
+    def initialize(key, billing_party_type)
       @key = key.to_sym
+      @billing_party_type = billing_party_type
       @features = {}
     end
 

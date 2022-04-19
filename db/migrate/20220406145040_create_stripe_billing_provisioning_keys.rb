@@ -1,6 +1,6 @@
 class CreateStripeBillingProvisioningKeys < ActiveRecord::Migration[7.0]
   def change
-    create_enum "provisioning_key_status", ["pending", "active", "expired", "failed"]
+    create_enum "provisioning_key_status", ["pending", "active", "expired", "failed", "cancelled"]
 
     create_table :stripe_billing_provisioning_keys do |t|
       t.references :billable, polymorphic: true, index: true

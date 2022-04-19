@@ -1,4 +1,6 @@
 StripeBilling::Engine.routes.draw do
+  root to: "plans#show"
+
   resource :webhooks, only: [:create]
 
   resource :plan, only: [:show, :new, :create, :destroy] do

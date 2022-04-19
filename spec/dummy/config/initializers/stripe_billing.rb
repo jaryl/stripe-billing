@@ -1,6 +1,4 @@
 StripeBilling.setup do |config|
-  config.billing_party_class = "Account"
-
   config.logger = Rails.logger.tagged("stripe-billing")
 
   config.error_reporter = ->(error, **kwargs) {
@@ -8,8 +6,8 @@ StripeBilling.setup do |config|
   }
 end
 
-Rails.configuration.after_initialize do
-  StripeBilling.feature_sets do
+Rails.configuration.to_prepare do
+  StripeBilling.feature_sets(:accounts) do
     feature_set :default do
       feature :restricted_access, zone: ""
     end
@@ -23,7 +21,7 @@ Rails.configuration.after_initialize do
     end
   end
 
-  StripeBilling.billing_plans do
+  StripeBilling.billing_plans(:accounts) do
     billing_plan :basic_plan, id: ENV["SAMPLE_BASIC_PLAN_ID"] do
       provisions :basic_features
       price :monthly, id: ENV["SAMPLE_BASIC_PLAN_MONTHLY_PRICE_ID"]

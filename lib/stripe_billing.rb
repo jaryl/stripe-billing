@@ -19,33 +19,46 @@ require "stripe_billing/webhooks_builder"
 module StripeBilling
   mattr_accessor :error_reporter
   mattr_accessor :logger
-  mattr_accessor :billing_party_class
+
+  mattr_accessor :billing_party_types, default: []
+
+  mattr_reader :billing_plans
+  mattr_reader :feature_sets
 
   class << self
     def setup
       yield self
     end
 
-    def billing_party
-      billing_party_class.safe_constantize
-    end
+    def billing_plans(billing_party_type, &block)
+      @@billing_plans ||= HashWithIndifferentAccess.new
 
-    def billing_plans(&block)
-      return @@billing_plans if defined?(@@billing_plans)
+      @@billing_party_types ||= []
+      @@billing_party_types << billing_party_type
+      @@billing_party_types.uniq!
 
-      builder = BillingPlanBuilder.new
+      return @@billing_plans[billing_party_type] if @@billing_plans.include?(billing_party_type)
+
+      builder = BillingPlanBuilder.new(billing_party_type)
       builder.instance_eval(&block) if block.present?
 
-      @@billing_plans = builder.build
+      @@billing_plans[billing_party_type] = builder.build
     end
 
-    def feature_sets(&block)
-      return @@feature_sets if defined?(@@feature_sets)
 
-      builder = FeatureSetBuilder.new
+    def feature_sets(billing_party_type, &block)
+      @@feature_sets ||= HashWithIndifferentAccess.new
+
+      @@billing_party_types ||= []
+      @@billing_party_types << billing_party_type
+      @@billing_party_types.uniq!
+
+      return @@feature_sets[billing_party_type] if @@feature_sets.include?(billing_party_type)
+
+      builder = FeatureSetBuilder.new(billing_party_type)
       builder.instance_eval(&block) if block.present?
 
-      @@feature_sets = builder.build
+      @@feature_sets[billing_party_type] = builder.build
     end
 
     def webhooks(&block)

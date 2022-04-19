@@ -32,11 +32,11 @@ module StripeBilling
     end
 
     def available_plans
-      @available_plans ||= StripeBilling.billing_plans
+      @available_plans ||= StripeBilling.billing_plans(billing_party.class.to_s.tableize)
     end
 
     def selected_price
-      @selected_price ||= StripeBilling.billing_plans[plan_key].billing_prices[price_key]
+      @selected_price ||= available_plans[plan_key].billing_prices[price_key]
     end
 
     private
