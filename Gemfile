@@ -9,6 +9,8 @@ group :development, :test do
   gem "dotenv-rails"
   # A PostgreSQL client library for Ruby
   gem "pg", "~> 1.3.1"
+  # Detect non-atomic interactions within DB transactions
+  gem "isolator"
   # Sprockets Rails integration
   gem "sprockets-rails"
   # Ruby on Rails Logtail integration
