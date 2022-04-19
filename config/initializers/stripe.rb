@@ -8,3 +8,6 @@ Stripe.api_version = ENV["STRIPE_API_VERSION"]
 Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
 Stripe.enable_telemetry = ENV["STRIPE_TELEMETRY"] == "true"
+
+Stripe.open_timeout = 1
+Stripe.read_timeout = 1
