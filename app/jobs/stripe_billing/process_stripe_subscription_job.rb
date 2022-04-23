@@ -24,7 +24,7 @@ module StripeBilling
         [provisioning_key.billable, provisioning_key],
         content: ApplicationController.render(
           :turbo_stream,
-          partial: "stripe_billing/payments/provisioning_key",
+          partial: "stripe_billing/payments/render_payment_element",
           locals: { provisioning_key: provisioning_key },
         )
       )

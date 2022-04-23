@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module StripeBilling
-  RSpec.describe DefaultPaymentMethodForStripeSubscriptionJob, type: :job do
+  RSpec.describe WebhookHandlers::CancelProvisioningKeyJob, type: :job do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 end

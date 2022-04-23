@@ -4,6 +4,8 @@ module StripeBilling
   RSpec.describe PaymentsController, type: :controller do
     routes { Engine.routes }
 
+    before { ActiveJob::Base.queue_adapter = :test }
+
     let(:account) { create(:account) }
 
     before { account }
@@ -34,6 +36,14 @@ module StripeBilling
           it { expect(response).to redirect_to(plan_path) }
         end
       end
+
+      describe "DELETE #destroy" do
+        before { delete :destroy }
+
+        it { expect(assigns(:provisioning_key)).to be_flagged_for_cancellation }
+        it { expect(ManuallyCancelPendingProvisioningKeyJob).to have_been_enqueued.with(assigns(:provisioning_key)) }
+        it { expect(response).to redirect_to(plan_payment_path) }
+      end
     end
 
     context "with active provisioning key" do
@@ -60,6 +70,14 @@ module StripeBilling
           it { expect(response).to redirect_to(plan_path) }
         end
       end
+
+      describe "DELETE #destroy" do
+        before { delete :destroy }
+
+        it { expect(assigns(:provisioning_key)).not_to be_flagged_for_cancellation }
+        it { expect(ManuallyCancelPendingProvisioningKeyJob).not_to have_been_enqueued.with(assigns(:provisioning_key)) }
+        it { expect(response).to redirect_to(plan_path) }
+      end
     end
 
     context "with no provisioning key" do
@@ -70,6 +88,11 @@ module StripeBilling
 
       describe "GET #confirm" do
         before { get :confirm }
+        it { expect(response).to redirect_to(new_plan_path) }
+      end
+
+      describe "DELETE #destroy" do
+        before { delete :destroy }
         it { expect(response).to redirect_to(new_plan_path) }
       end
     end

@@ -13,9 +13,11 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
     <%= javascript_importmap_tags %>
+
+    <%= yield :head %>
   </head>
 
-  <body>
+  <body class="bg-gradient-to-b from-white to-gray-50 h-screen pb-12">
     <%= yield %>
   </body>
 </html>

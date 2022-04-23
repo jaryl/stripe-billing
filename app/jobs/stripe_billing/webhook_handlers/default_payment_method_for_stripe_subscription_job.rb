@@ -1,5 +1,5 @@
 module StripeBilling
-  class DefaultPaymentMethodForStripeSubscriptionJob < ApplicationJob
+  class WebhookHandlers::DefaultPaymentMethodForStripeSubscriptionJob < ApplicationJob
     queue_as :default
 
     def perform(event)

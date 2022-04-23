@@ -46,7 +46,7 @@ export default class extends Controller {
       confirmParams: { return_url: this.returnUrl },
     });
 
-    this.errorsTarget.classList.remove("invisible");
+    this.errorsTarget.classList.remove("hidden");
     const selector = this.errorsTarget.dataset.selector;
 
     if (error.type === "card_error" || error.type === "validation_error") {

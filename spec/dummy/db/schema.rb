@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_042517) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "provisioning_key_status", ["pending", "active", "expired", "failed"]
+  create_enum "provisioning_key_status", ["pending", "active", "expired", "failed", "cancelled"]
 
   create_table "accounts", force: :cascade do |t|
     t.string "email", null: false

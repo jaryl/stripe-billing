@@ -2,7 +2,10 @@ StripeBilling.setup do |config|
   config.logger = Rails.logger.tagged("stripe-billing")
 
   config.error_reporter = ->(error, **kwargs) {
-    StripeBilling.logger.error error.message, error: error
+    StripeBilling.logger.error "[#{error.class}] #{error.message}", error: error
+    error.backtrace.each do |line|
+      StripeBilling.logger.error line
+    end
   }
 end
 
@@ -36,7 +39,8 @@ Rails.configuration.to_prepare do
   end
 
   StripeBilling.webhooks do
-    process "invoice.payment_succeeded", with: StripeBilling::DefaultPaymentMethodForStripeSubscriptionJob
-    process "customer.subscription.created", "customer.subscription.updated", with: StripeBilling::ActivateProvisioningKeyJob
+    process "invoice.payment_succeeded", with: "default_payment_method_for_stripe_subscription"
+    process "customer.subscription.updated", with: "cancel_provisioning_key"
+    process "customer.subscription.created", "customer.subscription.updated", with: "activate_provisioning_key"
   end
 end

@@ -5,9 +5,10 @@ module StripeBilling
     end
 
     def process(*args, with:)
+      handlers = Array.wrap(with).map { |handler_name| "StripeBilling::WebhookHandlers::#{handler_name.camelize}Job".safe_constantize }
       args.each do |arg|
         webhooks[arg] ||= []
-        webhooks[arg] += Array.wrap(with)
+        webhooks[arg] += handlers
         webhooks[arg].uniq!
       end
     end

@@ -1,0 +1,3 @@
+<%= turbo_stream.append :subscription_flow do %>
+  <span data-controller="redirect" data-redirect-action-value="advance" data-redirect-href-value="<%= stripe_billing.plan_path %>"></span>
+<%- end %>

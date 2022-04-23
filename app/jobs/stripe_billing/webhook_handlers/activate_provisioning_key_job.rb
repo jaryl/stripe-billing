@@ -1,5 +1,5 @@
 module StripeBilling
-  class ActivateProvisioningKeyJob < ApplicationJob
+  class WebhookHandlers::ActivateProvisioningKeyJob < ApplicationJob
     queue_as :default
 
     def perform(event)
@@ -7,6 +7,8 @@ module StripeBilling
 
       provisioning_key_gid = event.data.dig("object", "metadata", "provisioning_key_gid")
       provisioning_key = GlobalID::Locator.locate_signed(provisioning_key_gid)
+
+      # TODO: raise if provisioning key is not pending
 
       stripe_product_id = event.data.dig("object", "plan", "product")
 

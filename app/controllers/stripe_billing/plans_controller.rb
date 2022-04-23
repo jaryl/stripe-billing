@@ -30,7 +30,7 @@ module StripeBilling
     private
 
     def provisioning_key
-      @provisioning_key ||= current_billing_party.provisioning_keys.not_expired&.first
+      @provisioning_key ||= current_billing_party.provisioning_keys.where(status: [:active, :pending])&.first
     end
 
     def redirect_if_provisioning_key_pending
