@@ -11,10 +11,10 @@ module StripeBilling
       stripe_product_id = event.data.dig("object", "plan", "product")
 
       ActiveRecord::Base.transaction do
-        provisioning_key.update!({
+        provisioning_key.update!(
           status: :active,
           stripe_product_id: stripe_product_id,
-        })
+        )
 
         provisioning_key.billable.update!(feature_set_key: provisioning_key.billing_plan.feature_set.key)
       end

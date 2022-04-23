@@ -37,6 +37,6 @@ Rails.configuration.to_prepare do
 
   StripeBilling.webhooks do
     process "invoice.payment_succeeded", with: StripeBilling::DefaultPaymentMethodForStripeSubscriptionJob
-    process "customer.subscription.created", "customer.subscription.updated", "customer.subscription.deleted", with: StripeBilling::ActivateProvisioningKeyJob
+    process "customer.subscription.created", "customer.subscription.updated", with: StripeBilling::ActivateProvisioningKeyJob
   end
 end

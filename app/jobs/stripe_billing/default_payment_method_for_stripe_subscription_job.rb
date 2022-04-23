@@ -4,7 +4,6 @@ module StripeBilling
 
     def perform(event)
       return if event.data.dig("object", "billing_reason") != "subscription_create"
-      return unless event.pending?
 
       stripe_subscription_id = event.data.dig("object", "subscription")
       stripe_payment_intent_id = event.data.dig("object", "payment_intent")
