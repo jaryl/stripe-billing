@@ -44,6 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_042517) do
     t.boolean "flagged_for_cancellation", default: false, null: false
     t.string "plan_key", null: false
     t.string "price_key", null: false
+    t.datetime "stripe_current_period_end"
     t.string "stripe_customer_id"
     t.string "stripe_subscription_id"
     t.string "stripe_product_id"

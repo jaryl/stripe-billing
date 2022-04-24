@@ -11,10 +11,12 @@ module StripeBilling
       # TODO: raise if provisioning key is not pending
 
       stripe_product_id = event.data.dig("object", "plan", "product")
+      stripe_current_period_end = Time.at(event.data.dig("object", "current_period_end")).utc
 
       ActiveRecord::Base.transaction do
         provisioning_key.update!(
           status: :active,
+          stripe_current_period_end: stripe_current_period_end,
           stripe_product_id: stripe_product_id,
         )
 
