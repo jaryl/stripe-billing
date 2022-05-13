@@ -22,11 +22,6 @@ module StripeBilling
       end
     end
 
-    def destroy
-      @provisioning_key.update!(flagged_for_cancellation: true)
-      redirect_to new_plan_path
-    end
-
     private
 
     def provisioning_key

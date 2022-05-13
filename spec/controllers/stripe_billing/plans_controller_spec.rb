@@ -47,13 +47,6 @@ module StripeBilling
           it { expect(response).to render_template(:new) }
         end
       end
-
-      describe "DELETE #destroy" do
-        before { delete :destroy }
-
-        it { expect(assigns(:provisioning_key)).to be_blank }
-        it { expect(response).to redirect_to(new_plan_path) }
-      end
     end
 
     context "with pending provisioning record" do
@@ -71,11 +64,6 @@ module StripeBilling
 
       describe "POST #create" do
         before { post :create }
-        it { expect(response).to redirect_to(plan_payment_path) }
-      end
-
-      describe "DELETE #destroy" do
-        before { delete :destroy }
         it { expect(response).to redirect_to(plan_payment_path) }
       end
     end
@@ -102,13 +90,6 @@ module StripeBilling
 
         it { expect(assigns(:provisioning_key)).to be_persisted }
         it { expect(response).to redirect_to(plan_path) }
-      end
-
-      describe "DELETE #destroy" do
-        before { delete :destroy }
-
-        it { expect(assigns(:provisioning_key)).to be_flagged_for_cancellation }
-        it { expect(response).to redirect_to(new_plan_path) }
       end
     end
 
@@ -150,13 +131,6 @@ module StripeBilling
           it { expect(assigns(:provisioning_key)).to be_blank }
           it { expect(response).to render_template(:new) }
         end
-      end
-
-      describe "DELETE #destroy" do
-        before { delete :destroy }
-
-        it { expect(assigns(:provisioning_key)).to be_blank }
-        it { expect(response).to redirect_to(new_plan_path) }
       end
     end
   end
