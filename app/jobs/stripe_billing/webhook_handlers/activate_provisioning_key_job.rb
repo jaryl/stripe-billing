@@ -18,8 +18,8 @@ module StripeBilling
           status: :active,
           stripe_current_period_end: stripe_current_period_end,
           stripe_product_id: stripe_product_id,
+          flagged_for_cancellation: false,
         )
-
         provisioning_key.billable.update!(feature_set_key: provisioning_key.billing_plan.feature_set.key)
       end
     end

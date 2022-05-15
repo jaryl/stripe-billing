@@ -42,7 +42,7 @@ module StripeBilling
 
         it { expect(assigns(:provisioning_key)).to be_flagged_for_cancellation }
         it { expect(ManuallyCancelPendingProvisioningKeyJob).to have_been_enqueued.with(assigns(:provisioning_key)) }
-        it { expect(response).to redirect_to(plan_payment_path) }
+        it { expect(response).to redirect_to(new_plan_path) }
       end
     end
 

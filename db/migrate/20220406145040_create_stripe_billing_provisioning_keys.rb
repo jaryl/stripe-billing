@@ -1,5 +1,5 @@
 class CreateStripeBillingProvisioningKeys < ActiveRecord::Migration[7.0]
-  def change
+  def up
     create_enum "provisioning_key_status", ["pending", "active", "expired", "failed", "cancelled"]
 
     create_table :stripe_billing_provisioning_keys do |t|
@@ -21,6 +21,14 @@ class CreateStripeBillingProvisioningKeys < ActiveRecord::Migration[7.0]
       t.timestamps
 
       t.index [:billable_type, :billable_id], unique: true, where: "status IN ('pending', 'active')", name: "index_stripe_billing_provisioning_keys_on_billable_unique"
+    end
+
+    def down
+      drop_table :stripe_billing_provisioning_keys
+
+      execute <<-SQL
+        DROP TYPE provisioning_key_status;
+      SQL
     end
   end
 end

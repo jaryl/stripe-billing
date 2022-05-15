@@ -18,10 +18,7 @@ module StripeBilling
         after_commit { ManuallyCancelPendingProvisioningKeyJob.perform_later(provisioning_key) }
       end
 
-      respond_to do |format|
-        format.html { redirect_to plan_payment_path }
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("payment_element", partial: "spinner") }
-      end
+      redirect_to new_plan_path
     end
 
     private
